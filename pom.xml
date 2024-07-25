@@ -31,8 +31,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-    </dependencies>checkstyle.xml
-    checkstyle-suppressed.xml
+    </dependencies>
 
     <build>
         <plugins>
