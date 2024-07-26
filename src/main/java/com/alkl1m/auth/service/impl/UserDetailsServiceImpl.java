@@ -2,7 +2,6 @@ package com.alkl1m.auth.service.impl;
 
 import com.alkl1m.auth.domain.entity.User;
 import com.alkl1m.auth.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

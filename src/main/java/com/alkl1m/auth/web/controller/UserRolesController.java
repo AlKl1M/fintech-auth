@@ -2,7 +2,6 @@ package com.alkl1m.auth.web.controller;
 
 import com.alkl1m.auth.domain.entity.Role;
 import com.alkl1m.auth.service.RoleService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
