@@ -26,6 +26,6 @@ application:
     jwt:
       cookieName: jwt
       refreshCookieName: jwt-refresh
-      secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      secret: YiJW5JhK3uv6q8InoJgQYP3hmOEP/79009Y/6/Xeamxq9DnYSVZzU1m5iFRCNWymmBAmLmYmY2C1KcSqX5aELlN7fkLdJtehwaSjWotfrESvUIap6VI9GyMglmeuBPTfFQMHJM7qhLwZQXHIrA3sRjvSrDHNTffuEHmKqtWuXgIX%
       expirationMs: 3600000
       refreshExpirationMs: 86400000
