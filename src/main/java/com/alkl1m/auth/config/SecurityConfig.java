@@ -1,5 +1,6 @@
 package com.alkl1m.auth.config;
 
+import com.alkl1m.auth.domain.enums.ERole;
 import com.alkl1m.auth.filter.AuthTokenFilter;
 import com.alkl1m.auth.service.impl.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
@@ -58,7 +59,8 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()
+                        auth.requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("roles/**").hasAuthority(ERole.ADMIN.name())
                                 .anyRequest().authenticated()
                 );
         http.authenticationProvider(authenticationProvider());
