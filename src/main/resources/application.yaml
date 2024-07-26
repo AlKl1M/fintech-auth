@@ -1,0 +1,31 @@
+application-version: 0.0.1-SNAPSHOT
+application-description: Auth rest api
+
+server:
+  port: 8082
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://localhost:5434/auth
+    username: auth
+    password: auth
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yaml
+    enabled: true
+
+application:
+  security:
+    jwt:
+      cookieName: jwt
+      refreshCookieName: jwt-refresh
+      secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expirationMs: 3600000
+      refreshExpirationMs: 86400000
