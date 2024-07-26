@@ -1,12 +1,8 @@
 package com.alkl1m.auth.web.controller;
 
 import com.alkl1m.auth.domain.entity.RefreshToken;
-import com.alkl1m.auth.domain.entity.Role;
-import com.alkl1m.auth.domain.entity.User;
-import com.alkl1m.auth.domain.enums.ERole;
 import com.alkl1m.auth.domain.exception.TokenRefreshException;
-import com.alkl1m.auth.repository.RoleRepository;
-import com.alkl1m.auth.repository.UserRepository;
+import com.alkl1m.auth.service.UserService;
 import com.alkl1m.auth.service.impl.RefreshTokenServiceImpl;
 import com.alkl1m.auth.service.impl.UserDetailsImpl;
 import com.alkl1m.auth.util.JwtUtils;
@@ -24,43 +20,32 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final UserService userService;
     private final PasswordEncoder encoder;
     private final RefreshTokenServiceImpl refreshTokenService;
     private final JwtUtils jwtUtils;
 
-    @PutMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest,
-                                          final HttpServletRequest request) {
+    @PostMapping("/signup")
+    public ResponseEntity<String> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.findByName(ERole.USER).get());
-
-        User user = new User(signupRequest.name(),
+        userService.save(signupRequest.name(),
                 signupRequest.email(),
-                encoder.encode(signupRequest.password()),
-                roles);
-        userRepository.save(user);
+                encoder.encode(signupRequest.password()));
 
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    @PostMapping("/login")
+    public ResponseEntity<String> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.login(), loginRequest.password()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -81,7 +66,7 @@ public class AuthController {
     }
 
     @PostMapping("/refreshToken")
-    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+    public ResponseEntity<String> refreshToken(HttpServletRequest request) {
         String refreshToken = jwtUtils.getJwtRefreshFromCookies(request);
         if((refreshToken != null) && (!refreshToken.isEmpty())) {
             return refreshTokenService.findByToken(refreshToken)
@@ -100,7 +85,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<String> logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             Object principal = authentication.getPrincipal();

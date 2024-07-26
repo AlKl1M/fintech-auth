@@ -1,12 +1,13 @@
 package com.alkl1m.auth.service.impl;
 
 import com.alkl1m.auth.domain.entity.RefreshToken;
+import com.alkl1m.auth.domain.entity.User;
 import com.alkl1m.auth.domain.exception.TokenRefreshException;
 import com.alkl1m.auth.repository.RefreshTokenRepository;
 import com.alkl1m.auth.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,28 +18,34 @@ import java.util.UUID;
 
 @Service
 public class RefreshTokenServiceImpl {
+
     @Setter
     @Getter
     @Value("${application.security.jwt.refreshExpirationMs}")
     private Long refreshTokenDurationMs;
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
-    @Autowired
-    private UserRepository userRepository;
+
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
+
+    public RefreshTokenServiceImpl(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.userRepository = userRepository;
+    }
 
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);
     }
 
     public RefreshToken createRefreshToken(Long userId) {
-        RefreshToken refreshToken = new RefreshToken();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User not found with ID: %s", userId)));
 
-        refreshToken.setUser(userRepository.findById(userId).get());
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setUser(user);
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
         refreshToken.setToken(UUID.randomUUID().toString());
 
-        refreshToken = refreshTokenRepository.save(refreshToken);
-        return refreshToken;
+        return refreshTokenRepository.save(refreshToken);
     }
 
     public RefreshToken verifyExpiration(RefreshToken token) {
@@ -51,6 +58,8 @@ public class RefreshTokenServiceImpl {
 
     @Transactional
     public void deleteByUserId(Long userId) {
-        refreshTokenRepository.deleteByUser(userRepository.findById(userId).get());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+        refreshTokenRepository.deleteByUser(user);
     }
 }

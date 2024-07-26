@@ -5,7 +5,6 @@ import com.alkl1m.auth.service.impl.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -20,12 +19,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
-import java.security.SignatureException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
@@ -132,7 +128,11 @@ public class JwtUtils {
     }
 
     private ResponseCookie generateCookie(String name, String value) {
-        return ResponseCookie.from(name, value).path("/").maxAge(24 * 60 * 60).httpOnly(true).build();
+        return ResponseCookie.from(name, value)
+                .path("/")
+                .maxAge(24L * 60 * 60)
+                .httpOnly(true)
+                .build();
     }
 
     private String getCookieValueByName(HttpServletRequest request, String name) {

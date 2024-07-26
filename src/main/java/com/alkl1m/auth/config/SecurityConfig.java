@@ -25,11 +25,7 @@ public class SecurityConfig {
 
     UserDetailsServiceImpl userDetailsService;
     private AuthEntryPointJwt unauthorizedHandler;
-
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
-    }
+    private final AuthTokenFilter authenticationJwtTokenFilter;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -64,7 +60,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 );
         http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
