@@ -7,6 +7,7 @@ import com.alkl1m.auth.repository.RoleRepository;
 import com.alkl1m.auth.repository.UserRepository;
 import com.alkl1m.auth.service.RoleService;
 import com.alkl1m.auth.web.payload.AddRolesPayload;
+import com.alkl1m.auth.web.payload.UserRolesResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -64,7 +65,7 @@ public class RoleServiceImpl implements RoleService {
      * @return набор ролей для указанного пользователя.
      */
     @Override
-    public Set<Role> getRolesForUser(String login, String currentUserLogin) {
+    public UserRolesResponse getRolesForUser(String login, String currentUserLogin) {
         Optional<User> userOptional = userRepository.findByLogin(currentUserLogin);
         if (userOptional.isEmpty()) {
             throw new EntityNotFoundException("Текущий пользователь не найден");
@@ -87,7 +88,7 @@ public class RoleServiceImpl implements RoleService {
 
         User userToFetch = userToFetchOptional.get();
 
-        return userToFetch.getRoles();
+        return new UserRolesResponse(userToFetch.getRoles());
     }
 
 }

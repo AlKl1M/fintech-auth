@@ -90,7 +90,9 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**").permitAll()
+                        auth.requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("roles/**").hasAuthority(ERole.ADMIN.name())
                                 .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());

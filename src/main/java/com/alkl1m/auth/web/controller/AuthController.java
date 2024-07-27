@@ -8,6 +8,13 @@ import com.alkl1m.auth.service.impl.UserDetailsImpl;
 import com.alkl1m.auth.util.JwtUtils;
 import com.alkl1m.auth.web.payload.LoginRequest;
 import com.alkl1m.auth.web.payload.SignupRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -33,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/auth")
+@Tag(name = "auth", description = "The Auth API")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
@@ -46,6 +54,12 @@ public class AuthController {
      * @param signupRequest объект, содержащий данные для регистрации пользователя
      * @return ResponseEntity с кодом состояния 200 (OK) при успешной регистрации
      */
+    @Operation(summary = "Регистрация нового пользователя", tags = "auth")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешно зарегистрировал нового пользователя")
+    })
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
@@ -63,6 +77,12 @@ public class AuthController {
      * @return ResponseEntity с заголовками, содержащими JWT и токен обновления,
      * а также сообщением об успешном входе
      */
+    @Operation(summary = "Аутентификация пользователя и получение JWT токенов", tags = "auth")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Пользователь успешно аутентифицирован")
+    })
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
@@ -90,6 +110,12 @@ public class AuthController {
      * @param request HTTP-запрос, содержащий токен обновления в cookies
      * @return ResponseEntity с заголовком, содержащим новый JWT и сообщением об успешном обновлении токена
      */
+    @Operation(summary = "Обновление JWT токена на основе refreshToken", tags = "auth")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "JWT токен успешно обновлен")
+    })
     @PostMapping("/refreshToken")
     public ResponseEntity<String> refreshToken(HttpServletRequest request) {
         String refreshToken = jwtUtils.getJwtRefreshFromCookies(request);
@@ -115,6 +141,12 @@ public class AuthController {
      * @return ResponseEntity с заголовками, содержащими очищенные JWT и токен обновления,
      * а также сообщением о выходе из системы
      */
+    @Operation(summary = "Выход пользователя из системы и удаление токенов", tags = "auth")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Пользователь успешно вышел из системы")
+    })
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
