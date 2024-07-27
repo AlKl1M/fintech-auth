@@ -1,6 +1,5 @@
 package com.alkl1m.auth.web.controller;
 
-import com.alkl1m.auth.domain.entity.Role;
 import com.alkl1m.auth.service.RoleService;
 import com.alkl1m.auth.web.payload.UserRolesResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.Set;
 
 /**
  * Контроллер для управления ролями пользователей в приложении.
