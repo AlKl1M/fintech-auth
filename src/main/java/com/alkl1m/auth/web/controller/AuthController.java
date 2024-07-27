@@ -37,7 +37,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
-        userService.save(signupRequest.name(),
+        userService.save(signupRequest.login(),
                 signupRequest.email(),
                 encoder.encode(signupRequest.password()));
 
@@ -45,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<String> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.login(), loginRequest.password()));
         SecurityContextHolder.getContext().setAuthentication(authentication);

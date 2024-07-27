@@ -19,7 +19,7 @@ public class UserRolesController {
     private final RoleService roleService;
 
     @GetMapping("/{login}")
-    public ResponseEntity<Set<Role>> saveRole(@PathVariable String login,
+    public ResponseEntity<Set<Role>> getRoles(@PathVariable String login,
                                               Principal principal) {
         String currentUserLogin = principal.getName();
         return ResponseEntity.ok(roleService.getRolesForUser(login, currentUserLogin));

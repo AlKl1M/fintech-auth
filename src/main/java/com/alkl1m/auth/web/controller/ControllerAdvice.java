@@ -1,6 +1,7 @@
 package com.alkl1m.auth.web.controller;
 
 import com.alkl1m.auth.domain.exception.ExceptionBody;
+import com.alkl1m.auth.domain.exception.UserAlreadyExistsException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -72,6 +73,14 @@ public class ControllerAdvice {
             final AuthenticationException e
     ) {
         return new ExceptionBody("Authentication failed.");
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionBody handleUserAlreadyExists(
+            final UserAlreadyExistsException e
+    ) {
+        return new ExceptionBody("User already exists.");
     }
 
 }
