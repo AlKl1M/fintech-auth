@@ -24,6 +24,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Контроллер для обработки аутентификации пользователей.
+ * Регистрация, вход в систему, обновление токена и выход из системы.
+ *
+ * @author alkl1m
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/auth")
@@ -34,6 +40,12 @@ public class AuthController {
     private final RefreshTokenServiceImpl refreshTokenService;
     private final JwtUtils jwtUtils;
 
+    /**
+     * Регистрация нового пользователя.
+     *
+     * @param signupRequest объект, содержащий данные для регистрации пользователя
+     * @return ResponseEntity с кодом состояния 200 (OK) при успешной регистрации
+     */
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
@@ -44,6 +56,13 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Аутентификация пользователя и получение JWT токенов.
+     *
+     * @param loginRequest объект, содержащий данные для входа пользователя
+     * @return ResponseEntity с заголовками, содержащими JWT и токен обновления,
+     * а также сообщением об успешном входе
+     */
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
@@ -65,10 +84,16 @@ public class AuthController {
                 .body("User logged in successfully!");
     }
 
+    /**
+     * Обновление JWT токена на основе refreshToken.
+     *
+     * @param request HTTP-запрос, содержащий токен обновления в cookies
+     * @return ResponseEntity с заголовком, содержащим новый JWT и сообщением об успешном обновлении токена
+     */
     @PostMapping("/refreshToken")
     public ResponseEntity<String> refreshToken(HttpServletRequest request) {
         String refreshToken = jwtUtils.getJwtRefreshFromCookies(request);
-        if((refreshToken != null) && (!refreshToken.isEmpty())) {
+        if ((refreshToken != null) && (!refreshToken.isEmpty())) {
             return refreshTokenService.findByToken(refreshToken)
                     .map(refreshTokenService::verifyExpiration)
                     .map(RefreshToken::getUser)
@@ -84,6 +109,12 @@ public class AuthController {
         return ResponseEntity.badRequest().body("Refresh Token is empty!");
     }
 
+    /**
+     * Выход пользователя из системы и удаление токенов.
+     *
+     * @return ResponseEntity с заголовками, содержащими очищенные JWT и токен обновления,
+     * а также сообщением о выходе из системы
+     */
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -16,12 +16,22 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Реализация логики управления ролями пользователей.
+ *
+ * @author alkl1m
+ */
 @Service
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
+    /**
+     * Сохранение ролей для указанного пользователя.
+     *
+     * @param payload объект, содержащий информацию о пользователе и ролях.
+     */
     @Override
     public void saveRole(AddRolesPayload payload) {
         Optional<User> optionalUser = userRepository.findByLogin(payload.login());
@@ -46,10 +56,17 @@ public class RoleServiceImpl implements RoleService {
         userRepository.save(user);
     }
 
+    /**
+     * Получение роли для указанного пользователя, проверка права доступа текущего пользователя.
+     *
+     * @param login            логин пользователя, для которого запрашиваются роли.
+     * @param currentUserLogin логин текущего пользователя, выполняющего запрос.
+     * @return набор ролей для указанного пользователя.
+     */
     @Override
     public Set<Role> getRolesForUser(String login, String currentUserLogin) {
         Optional<User> userOptional = userRepository.findByLogin(currentUserLogin);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             throw new EntityNotFoundException("Текущий пользователь не найден");
         }
 

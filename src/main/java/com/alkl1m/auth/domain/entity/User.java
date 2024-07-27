@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author alkl1m
+ */
 @Data
 @Entity
 @Table(name = "users")

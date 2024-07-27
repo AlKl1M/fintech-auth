@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
+/**
+ * @author alkl1m
+ */
 @Data
 @Entity
 @AllArgsConstructor

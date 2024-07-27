@@ -6,6 +6,11 @@ import lombok.Setter;
 
 import java.util.Map;
 
+/**
+ * Тело исключения для передачи клиенту.
+ *
+ * @author alkl1m
+ */
 @Getter
 @Setter
 @AllArgsConstructor

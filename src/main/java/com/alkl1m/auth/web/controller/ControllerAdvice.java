@@ -16,9 +16,20 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Глобальный обработчик исключений для контроллеров приложения.
+ *
+ * @author alkl1m
+ */
 @RestControllerAdvice
 public class ControllerAdvice {
 
+    /**
+     * Обработчик исключения IllegalStateException.
+     *
+     * @param e исключение, которое нужно обработать
+     * @return объект ExceptionBody с сообщением об ошибке
+     */
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleIllegalState(
@@ -27,6 +38,11 @@ public class ControllerAdvice {
         return new ExceptionBody(e.getMessage());
     }
 
+    /**
+     * Обработчик исключений доступа (AccessDeniedException).
+     *
+     * @return объект ExceptionBody с сообщением о запрете доступа
+     */
     @ExceptionHandler({
             AccessDeniedException.class,
             org.springframework.security.access.AccessDeniedException.class
@@ -36,6 +52,12 @@ public class ControllerAdvice {
         return new ExceptionBody("Access denied.");
     }
 
+    /**
+     * Обработчик исключения MethodArgumentNotValidException.
+     *
+     * @param e исключение, связанное с невалидными аргументами метода
+     * @return объект ExceptionBody с сообщением о неудачной валидации и списком ошибок
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleMethodArgumentNotValid(
@@ -53,6 +75,12 @@ public class ControllerAdvice {
         return exceptionBody;
     }
 
+    /**
+     * Обработчик исключения ConstraintViolationException.
+     *
+     * @param e исключение, связанное с нарушением ограничений валидации
+     * @return объект ExceptionBody с сообщением о неудачной валидации и списком ошибок
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleConstraintViolation(
@@ -67,6 +95,12 @@ public class ControllerAdvice {
         return exceptionBody;
     }
 
+    /**
+     * Обработчик исключения AuthenticationException.
+     *
+     * @param e исключение, связанное с ошибкой аутентификации
+     * @return объект ExceptionBody с сообщением о неудачной аутентификации
+     */
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleAuthentication(
@@ -75,6 +109,12 @@ public class ControllerAdvice {
         return new ExceptionBody("Authentication failed.");
     }
 
+    /**
+     * Обработчик исключения UserAlreadyExistsException.
+     *
+     * @param e исключение, связанное с попыткой зарегистрировать уже существующего пользователя
+     * @return объект ExceptionBody с сообщением о том, что пользователь уже существует
+     */
     @ExceptionHandler(UserAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleUserAlreadyExists(

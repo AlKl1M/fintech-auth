@@ -11,12 +11,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+/**
+ * Реализация UserService, сохраняющая пользователя и проверяющая его существование.
+ *
+ * @author alkl1m
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
+    /**
+     * Сохранение нового пользователя, если его не существует.
+     *
+     * @param login    логин нового юзера.
+     * @param email    почта нового юзера.
+     * @param password пароль нового юзера.
+     */
     @Override
     public void save(String login, String email, String password) {
         checkUserExists(login, email);

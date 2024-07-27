@@ -1,5 +1,10 @@
 package com.alkl1m.auth.domain.enums;
 
+/**
+ * Перечисление ролей для пользователя.
+ *
+ * @author alkl1m
+ */
 public enum ERole {
     USER,
     CREDIT_USER,

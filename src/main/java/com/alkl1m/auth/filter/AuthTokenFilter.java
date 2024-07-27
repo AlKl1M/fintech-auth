@@ -18,6 +18,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Фильтрация HTTP-запросов и проверка наличия и валидности JWT в запросах.
+ * Извлекает токен из куки, проверяет его и устанавливает аутентификацию для пользователя.
+ *
+ * @author alkl1m
+ */
 @Component
 @RequiredArgsConstructor
 public class AuthTokenFilter extends OncePerRequestFilter {
@@ -27,6 +33,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LogManager.getLogger(AuthTokenFilter.class);
 
+    /**
+     * Фильтр для запроса. Проверяет наличие JWT в запросе и,
+     * если токен действителен, аутентифицирует его.
+     *
+     * @param request     запрос.
+     * @param response    ответ.
+     * @param filterChain цепочка фильтров.
+     * @throws ServletException если ошибка при обработке запроса.
+     * @throws IOException      если ошибка ввода-вывода.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
