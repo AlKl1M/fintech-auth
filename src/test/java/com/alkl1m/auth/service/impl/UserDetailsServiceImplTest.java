@@ -34,12 +34,12 @@ class UserDetailsServiceImplTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         userRepository.deleteAll();
     }
 
     @Test
-    public void testLoadUserByLogin_withValidUser_returnsUser() {
+    void testLoadUserByLogin_withValidUser_returnsUser() {
         String login = "login";
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
 

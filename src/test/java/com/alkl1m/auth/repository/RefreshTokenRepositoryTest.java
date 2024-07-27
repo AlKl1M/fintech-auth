@@ -2,9 +2,7 @@ package com.alkl1m.auth.repository;
 
 import com.alkl1m.auth.TestBeans;
 import com.alkl1m.auth.domain.entity.RefreshToken;
-import com.alkl1m.auth.domain.entity.Role;
 import com.alkl1m.auth.domain.entity.User;
-import com.alkl1m.auth.domain.enums.ERole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
