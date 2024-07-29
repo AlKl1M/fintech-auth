@@ -10,8 +10,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +22,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Утилита для работы с JSON Web Tokens.
@@ -31,7 +32,6 @@ import java.util.Map;
  */
 @Component
 public class JwtUtils {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     @Value("${application.security.jwt.secret}")
     private String jwtSecret;
@@ -44,6 +44,8 @@ public class JwtUtils {
 
     @Value("${application.security.jwt.refreshCookieName}")
     private String jwtRefreshCookie;
+
+    private static final Logger logger = LogManager.getLogger(JwtUtils.class);
 
     /**
      * Генерирует JWT cookie на основе информации о пользователе.
@@ -189,6 +191,7 @@ public class JwtUtils {
      */
     public String generateTokenFromUserDetails(UserDetailsImpl userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", userDetails.getId());
         claims.put("roles", userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList());
@@ -226,11 +229,8 @@ public class JwtUtils {
      * @return значение cookie, если оно существует; null, если cookie с указанным именем не найден
      */
     private String getCookieValueByName(HttpServletRequest request, String name) {
-        Cookie cookie = WebUtils.getCookie(request, name);
-        if (cookie != null) {
-            return cookie.getValue();
-        } else {
-            return null;
-        }
+        return Optional.ofNullable(WebUtils.getCookie(request, name))
+                .map(Cookie::getValue)
+                .orElse(null);
     }
 }
