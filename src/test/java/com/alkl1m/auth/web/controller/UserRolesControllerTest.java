@@ -40,12 +40,7 @@ class UserRolesControllerTest {
                 .andExpectAll(
                         status().isOk(),
                         content().json("""
-                                    [
-                                      {
-                                        "id": 1,
-                                        "name": "USER"
-                                      }
-                                    ]
+                                    {"roles":[{"id":1,"name":"USER"}]}
                                 """)
                 );
     }
@@ -64,12 +59,7 @@ class UserRolesControllerTest {
                 .andExpectAll(
                         status().isOk(),
                         content().json("""
-                                    [
-                                      {
-                                        "id": 1,
-                                        "name": "USER"
-                                      }
-                                    ]
+                                    {"roles":[{"id":1,"name":"USER"}]}
                                 """)
                 );
     }

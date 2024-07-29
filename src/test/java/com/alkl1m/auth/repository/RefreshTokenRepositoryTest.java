@@ -55,7 +55,7 @@ class RefreshTokenRepositoryTest {
         String newToken = "397b4759-568c-451d-83dc-a5d6c372b7fd";
         newRefreshToken.setToken(newToken);
         refreshTokenRepository.save(newRefreshToken);
-        assertThat(entityManager.find(RefreshToken.class, newRefreshToken.getId()).getToken()).isEqualTo(newToken);
+        assertEquals(refreshTokenRepository.findById(newRefreshToken.getId()).get().getToken(), newRefreshToken.getToken());
     }
 
     @Test
