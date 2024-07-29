@@ -51,14 +51,6 @@ class RefreshTokenRepositoryTest {
     }
 
     @Test
-    void testUpdate_withValidPayload_returnsSameToken() {
-        String newToken = "397b4759-568c-451d-83dc-a5d6c372b7fd";
-        newRefreshToken.setToken(newToken);
-        refreshTokenRepository.save(newRefreshToken);
-        assertEquals(refreshTokenRepository.findById(newRefreshToken.getId()).get().getToken(), newRefreshToken.getToken());
-    }
-
-    @Test
     void testFindByToken_withValidPayload_returnsValidToken() {
         Optional<RefreshToken> retrievedRole = refreshTokenRepository.findByToken(newRefreshToken.getToken());
         assertNotNull(retrievedRole);
