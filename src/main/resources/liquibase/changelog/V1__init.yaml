@@ -1,0 +1,108 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: alkl1m
+      changes:
+        - createTable:
+            tableName: users
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: login
+                  type: text
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: email
+                  type: text
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: text
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2
+      author: alkl1m
+      changes:
+        - createTable:
+            tableName: user_role
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 3
+      author: alkl1m
+      changes:
+        - createTable:
+            tableName: user_to_role
+            ifNotExists: true
+            columns:
+              - column:
+                  name: user_id
+                  type: serial
+                  constraints:
+                    foreignKeyName: user_id
+                    referencedTableName: users
+                    referencedColumnNames: id
+                    nullable: false
+              - column:
+                  name: user_role
+                  type: serial
+                  constraints:
+                    foreignKeyName: role_id
+                    referencedTableName: user_role
+                    referencedColumnNames: id
+                    nullable: false
+  - changeSet:
+      id: 4
+      author: alkl1m
+      changes:
+        - createTable:
+            tableName: refresh_token
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: serial
+                  constraints:
+                    foreignKeyName: user
+                    referencedTableName: users
+                    referencedColumnNames: id
+                    nullable: false
+              - column:
+                  name: token
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiry_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
